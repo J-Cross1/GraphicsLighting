@@ -3,6 +3,8 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 
+#include <iostream>
+
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <glm/ext.hpp>
@@ -43,9 +45,15 @@ int main(int argc, char *argv[])
 
 	bool quit = false;
 	float angle = 0;
+	float a = 1.0;
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+	
+	bool leftPress = false;
+	bool rightPress = false;
+	bool upPress = false;
+	bool downPress = false;
 
 	while (!quit)
 	{
@@ -97,21 +105,38 @@ int main(int argc, char *argv[])
 		shader->setUniform("in_Ambient", glm::vec3(0.2, 0.2, 0.2));
 		shader->setUniform("in_LightPos", glm::vec3(50, 10, 10));
 
-
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_KEYDOWN)
 			{
-				event.key.keysym.sym;
-				SDLK_DOWN;
+				if (event.key.keysym.sym == SDLK_LEFT) { leftPress = true; }
+				if (event.key.keysym.sym == SDLK_RIGHT) { rightPress = true; }
+				if (event.key.keysym.sym == SDLK_UP) { upPress = true; }
+				if (event.key.keysym.sym == SDLK_DOWN) { downPress = true; }
 			}
 			else if (event.type == SDL_KEYUP)
 			{
-				event.key.keysym.sym;
-				SDLK_UP;
+				if (event.key.keysym.sym == SDLK_LEFT) { leftPress = false; }
+				if (event.key.keysym.sym == SDLK_RIGHT) { leftPress = false; }
+				if (event.key.keysym.sym == SDLK_UP) { leftPress = false; }
+				if (event.key.keysym.sym == SDLK_DOWN) { leftPress = false; }
 			}
 		}
 
+		if (leftPress == true)
+		{
+			std::cout << "true";
+		}
+		else if (leftPress == false)
+		{
+			std::cout << "false";
+		}
+
+		if (leftPress == true)
+		{
+			angle += 2.0f;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+		}
 
 
 		angle+= 2.0f;
