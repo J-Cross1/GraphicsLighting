@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 
 	bool quit = false;
 	float angle = 0;
+	float camangle = 0;
 	float a = 1.0;
 
 	glEnable(GL_CULL_FACE);
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
 
 		// Create a "camera"
 		glm::mat4 model(1.0f);
-		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+		model = glm::rotate(model, glm::radians(camangle), glm::vec3(0, 1, 0));
 
 		shader->setUniform("in_View", glm::inverse(model));
 
@@ -117,12 +118,13 @@ int main(int argc, char *argv[])
 			else if (event.type == SDL_KEYUP)
 			{
 				if (event.key.keysym.sym == SDLK_LEFT) { leftPress = false; }
-				if (event.key.keysym.sym == SDLK_RIGHT) { leftPress = false; }
-				if (event.key.keysym.sym == SDLK_UP) { leftPress = false; }
-				if (event.key.keysym.sym == SDLK_DOWN) { leftPress = false; }
+				if (event.key.keysym.sym == SDLK_RIGHT) { rightPress = false; }
+				if (event.key.keysym.sym == SDLK_UP) { upPress = false; }
+				if (event.key.keysym.sym == SDLK_DOWN) { downPress = false; }
 			}
 		}
 
+		//check if button is pressed
 		if (leftPress == true)
 		{
 			std::cout << "true";
@@ -132,12 +134,20 @@ int main(int argc, char *argv[])
 			std::cout << "false";
 		}
 
+
 		if (leftPress == true)
 		{
-			angle += 2.0f;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+			camangle += 2.0f;
+			model = glm::rotate(model, glm::radians(camangle), glm::vec3(0, 1, 0));
+			shader->setUniform("in_View", glm::inverse(model));
 		}
 
+		if (rightPress == true)
+		{
+			camangle -= 2.0f;
+			model = glm::rotate(model, glm::radians(camangle), glm::vec3(0, 1, 0));
+			shader->setUniform("in_View", glm::inverse(model));
+		}
 
 		angle+= 2.0f;
 
